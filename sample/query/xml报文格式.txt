@@ -1,0 +1,20 @@
+<query-json-req>
+	<template-id>TR1001102001002001</template-id>
+	<where>
+		<operation command="or" >
+		    <resultset>
+				<condition command="and" >
+					<case colume-name="fund_code" colume_value="000089" express_op="=" />
+					<case colume-name="fund_name" colume_value="工银货币" express_op="=" />
+				</condition>
+			</resultset>
+			<resultset>
+			    <condition command="and" >
+					<case colume-name="fund_code" colume_value="482002" express_op="=" />
+					<case colume-name="fund_name" colume_value="工银货币" express_op="=" />
+				</condition>
+			</resultset>
+		</operation>
+	</where>
+
+</query-json-req>

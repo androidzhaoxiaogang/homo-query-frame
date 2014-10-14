@@ -1,0 +1,108 @@
+<project name="homo-query-frm" basedir="." default="all">
+      <property name="name" value="homo-query-frame"/>
+      <property name="src.dir" value="src"/>
+	  <property name="build.dir.classes" value="target/classes"/>
+	  <property name="proj.ref.lib.dir" value="lib"></property>
+	  <property name="proj.bin.dir" value="bin"></property>
+      <property name="build.dir" value="build"/>
+	  <property name="build.dir.project" value="${build.dir}/${name}"></property>
+      <property name="web.xml.location" value="WebContent/WEB-INF"></property>
+	
+      <property environment="env"/>
+      <property name="tomcat.home" value="D:/tomcat"/>
+      <property name="tomcat.webapps.dir" value="${tomcat.home}/webapps"/>   
+	  
+      <target name="clean" description="clean...">
+          <delete dir="${build.dir}"/>
+      </target>
+	  
+      <target name="init" description="init...">
+      	  <mkdir dir="${build.dir}"/>
+      	  <mkdir dir="${build.dir.project}"/>
+      	  <mkdir dir="${build.dir.project}/bin"/>
+      	  <mkdir dir="${build.dir.project}/bin/logs"/>
+      	  <mkdir dir="${build.dir.project}/META-INF"/>
+      	  <mkdir dir="${build.dir.project}/WEB-INF"/>
+      	  <mkdir dir="${build.dir.project}/WEB-INF/lib"/>
+      	  <mkdir dir="${build.dir.project}/WEB-INF/classes"/>
+      	  
+      	  <copy todir="${build.dir.project}/WEB-INF/lib">
+      	  	  <fileset dir="${proj.ref.lib.dir}">
+      	  		  <include name="*.jar"/>
+      	  	  </fileset>
+      	  </copy>
+      	
+	  	  <copy todir="${build.dir.project}/WEB-INF/classes">
+    	  	  <fileset dir="${build.dir.classes}">
+    	  	  	  <include name="**/*"/>
+    	  	  </fileset>
+    	  </copy>
+      	
+      	  <copy todir="${build.dir.project}/WEB-INF">
+    	  	  <fileset dir="${web.xml.location}">
+    	  	  	  <include name="web.xml"/>
+    	  	  </fileset>
+    	  </copy>
+      	  
+      	  <copy todir="${build.dir.project}/bin">
+		  	  <fileset dir="${proj.bin.dir}">
+		  	  	  <include name="**/*"/>
+		  	  </fileset>
+	 	  </copy>
+	  </target>
+
+	  <target name="packageClientJar" depends="init" description="Package client jar">
+		  <jar jarfile="${build.dir}/net-json-lib.jar" basedir="${build.dir.project}/WEB-INF/classes">  
+		  	  <exclude name="com/**/**"/>
+		  	  <exclude name="test/**/**"/>
+		  	  <exclude name="*.xml"/>
+		      <exclude name="*.properties"/>
+	      </jar>	
+	  	  
+	  	 <jar jarfile="${build.dir}/alibaba-json-lib.jar" basedir="${build.dir.project}/WEB-INF/classes">  
+		  	  <exclude name="com/howbuy/**/**"/>
+	  	 	  <exclude name="net/**/**"/>
+		  	  <exclude name="test/**/**"/>
+		  	  <exclude name="*.xml"/>
+		      <exclude name="*.properties"/>
+	      </jar>	
+	  	
+	  	 <jar jarfile="${build.dir}/homo-client.jar" basedir="${build.dir.project}/WEB-INF/classes">  
+		  	  <include name="com/howbuy/appframework/homo/queryapi/JsonQueryRequest.class"/>
+	  	 	  <include name="com/howbuy/appframework/homo/queryapi/JsonQueryResp.class"/>
+	  	 	  <include name="com/howbuy/appframework/homo/queryapi/common/struct/Case.class"/>
+	  	 	  <include name="com/howbuy/appframework/homo/queryapi/common/struct/Condition.class"/>  	 	
+	  	 	  <include name="com/howbuy/appframework/homo/queryapi/common/struct/Operation.class"/>  	 	
+	  	 	  <include name="com/howbuy/appframework/homo/queryapi/common/struct/ResultSet.class"/>
+	  	 	  <include name="com/howbuy/appframework/homo/queryapi/common/struct/Where.class"/>
+	      </jar>	
+	  </target>
+	  	
+      <target name="packageWar" depends="init" description="Build the web application archive">
+          <war warfile="${build.dir.project}.war" basedir="${build.dir.project}" webxml="${build.dir.project}/WEB-INF/web.xml">
+              <include name="*"/>
+              <include name="images/**"/>
+              <include name="decorators/**"/>
+              <include name="scripts/**"/>
+              <include name="styles/**"/>
+          	  <include name="bin/**"/>
+              <include name="WEB-INF/*.*"/>
+              <include name="WEB-INF/lib/**"/>
+              <include name="WEB-INF/pages/**"/>
+              <include name="WEB-INF/classes/**"/>
+              <exclude name="WEB-INF/web.xml"/>
+          </war>
+      </target>
+	
+    <target name="deploy" depends="init" description="Deploy the web application">
+    	<echo message="${tomcat.webapps.dir}"></echo>
+    	<echo message="${build.dir}/${name}.war"></echo>
+    	<copy todir="${tomcat.webapps.dir}">
+	  	    <fileset dir="${build.dir}">
+	  	  	    <include name="${name}.war"/>
+	  	    </fileset>
+	    </copy>
+    </target>
+
+      <target name="all" depends="clean,init,packageClientJar,packageWar,deploy" description="clean,init,packageWar,deploy"/>
+</project>

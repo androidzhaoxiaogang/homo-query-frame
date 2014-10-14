@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+	"http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+
+	<!-- Load database config -->
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<value>classpath:conf.properties</value>
+		</property>
+	</bean>
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${server.db.driver}" />
+		<property name="url" value="${server.db.cache.url}" />
+		<property name="username" value="${server.db.cache.username}" />
+		<property name="password" value="${server.db.cache.password}" />
+		<property name="maxWait" value="4" />
+		<property name="maxActive" value="15" />
+		<property name="validationQuery" value="select 1 from dual" />
+		<property name="initialSize" value="6" />
+		<property name="minIdle" value="2" />
+		<property name="maxIdle" value="4" />
+		<property name="testOnBorrow" value="true" />
+		<property name="testOnReturn" value="true" />
+		<property name="testWhileIdle" value="true" />
+		
+		<!-- 释放连接. -->
+		<property name="removeAbandoned" value="false" />
+		<property name="removeAbandonedTimeout" value="3000" />
+		<property name="logAbandoned" value="true" />
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<property name="minEvictableIdleTimeMillis" value="60000" />
+	</bean>
+	
+    <bean id="jedisPools" class="com.howbuy.appframework.homo.configure.commons.redis.RedisPools">
+    	<property name="pools">
+    	    <map>
+    	    	<entry key="read-only">
+    	    		<list>
+    	    			<ref bean="jedisReadOnlyPool" />
+    	    		</list>
+    	    	</entry>
+    	    	
+    	    	<entry key="write-only">
+    	    		<list>
+    	    			<ref bean="jedisWriteOnlyPool" />
+    	    		</list>
+    	    	</entry>
+    	    </map>
+    	</property>
+    </bean>
+
+	<bean id="jedisReadOnlyPool" class="redis.clients.jedis.JedisPool" destroy-method="destroy">
+	    <constructor-arg index="0">
+            <bean factory-bean="jedisPoolConfig" factory-method="getConfig"/>
+	    </constructor-arg>
+        <constructor-arg index="1" value="${redis.readOnly.host}"/>
+        <constructor-arg index="2" value="${redis.readOnly.port}"/>
+        <constructor-arg index="4" value="${redis.readOnly.password}"/>
+        <constructor-arg index="3" value="${redis.readOnly.timeout}"/>
+	</bean>
+	
+	<bean id="jedisWriteOnlyPool" class="redis.clients.jedis.JedisPool" destroy-method="destroy">
+	    <constructor-arg index="0">
+            <bean factory-bean="jedisPoolConfig" factory-method="getConfig"/>
+	    </constructor-arg>
+        <constructor-arg index="1" value="${redis.writeOnly.host}"/>
+        <constructor-arg index="2" value="${redis.writeOnly.port}"/>
+        <constructor-arg index="4" value="${redis.writeOnly.password}"/>
+        <constructor-arg index="3" value="${redis.writeOnly.timeout}"/>
+	</bean>
+
+    <bean id="jedisPoolConfig" class="com.howbuy.appframework.homo.configure.commons.redis.RedisPoolConfig">
+
+	    <!--最大连接数-->
+	    <property name="maxActive" value="500" />
+
+	    <!--初始化连接数-->
+	    <property name="minIdle" value="100"/>
+	    
+	    <!--最大空闲连接数-->
+	    <property name="maxIdle" value="100" />
+	
+	    <!--最大等待时间-->
+	    <property name="maxWait" value="5000" />
+	    <property name="testOnBorrow" value="true" />
+	    <property name="testOnReturn" value="true" />
+	    <property name="testWhileIdle" value="true" />
+	</bean>
+    
+	<bean id="jdbcProxyProvider" class="com.howbuy.appframework.homo.configure.commons.jdbc.rmi.JdbcProxyProviderImpl"/>
+
+	<bean id="commonDAO" class="com.howbuy.appframework.homo.queryapi.db.CommonDAO">
+		<property name="jdbcProxyProvider" ref="jdbcProxyProvider" />
+	</bean>
+
+	<bean id="queryService" class="com.howbuy.appframework.homo.queryapi.db.QueryServiceImpl">
+		<property name="commonDAO" ref="commonDAO" />
+	</bean>
+
+</beans>

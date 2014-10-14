@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+	"http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+
+	<bean id="cacheLoadTask" class="com.howbuy.appframework.homo.queryapi.cache.CacheLoadTask">
+		<property name="loaders">
+			<list>
+				<ref bean="configureObjectLoader" />
+				<ref bean="redisCacheLoader" />
+			</list>
+		</property>
+		<property name="duringSecond" value="5" />
+	</bean>
+
+	<bean id="configureObjectLoader" class="com.howbuy.appframework.homo.queryapi.cache.ConfigureObjectLoader">
+		<property name="queryService" ref="queryService" />
+	</bean>
+
+	<bean id="redisCacheLoader" class="com.howbuy.appframework.homo.queryapi.cache.RedisCacheLoader">
+		<property name="queryService" ref="queryService" />
+	</bean>
+
+</beans>

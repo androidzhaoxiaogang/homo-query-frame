@@ -1,0 +1,101 @@
+{
+  "query-json-req": 
+  {
+        "template-id": "TR1001102001002001",
+        "where": 
+		{
+            "operation": 
+			{
+				"-command": "or",
+				"resultset": 
+				[
+					{
+						"operation": 
+						{
+							"-command": "or",
+							"resultset": 
+							[
+								{
+									"condition": 
+									{
+										"-command": "and",
+										"case": 
+										[
+											{
+												"-colume-name": "fundCode",
+												"-colume_value": "020005",
+												"-express_op": "="
+											},
+											{
+												"-colume-name": "fundName",
+												"-colume_value": "国泰金马稳健回报证券投资基金",
+												"-express_op": "="
+											}
+										]
+									}
+								},
+								{
+									"condition": 
+									{
+										"-command": "and",
+										"case": 
+										[
+											{
+												"-colume-name": "fundCode",
+												"-colume_value": "482002",
+												"-express_op": "="
+											},
+											{
+												"-colume-name": "fundName",
+												"-colume_value": "工银瑞信货币市场基金",
+												"-express_op": "="
+											}
+										]
+									}
+								}
+							]
+						}
+					},
+					{
+						"condition":
+						{
+							"-command": "and",
+							"case": 
+							[
+								{
+								  "-colume-name": "fundCode",
+								  "-colume_value": "482002",
+								  "-express_op": "="
+								},
+								{
+								  "-colume-name": "fundName",
+								  "-colume_value": "工银瑞信货币市场基金",
+								  "-express_op": "="
+								}
+							]
+						}
+					},
+					{
+						"condition": 
+						{
+							"-command": "and",
+							"case": 
+							[
+								{
+									"-colume-name": "fundCode",
+									"-colume_value": "020005",
+									"-express_op": "="
+								},
+								{
+									"-colume-name": "fundName",
+									"-colume_value": "工银瑞信货币市场基金",
+									"-express_op": "="
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	}
+}

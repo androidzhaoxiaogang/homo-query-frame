@@ -1,0 +1,60 @@
+{
+    "query-json-req": 
+	{
+		"template-id": "TR1001102001002001",
+		"where": 
+		{
+			"operation": 
+			{
+				"-command": "or",
+				"resultset": 
+				[
+					{
+						"condition":
+						{
+						    "-command": "and",
+						    "case": 
+							[
+								{
+								  "-colume-name": "fundCode",
+								  "-colume_value": "000089",
+								  "-express_op": "="
+								},
+								{
+								  "-colume-name": "fundName",
+								  "-colume_value": "工银债券",
+								  "-express_op": "="
+								}
+							]
+						}
+					},
+					{
+						"condition": 
+						{
+							"-command": "and",
+							"case": 
+							[
+								{
+								  "-colume-name": "fundCode",
+								  "-colume_value": "482002",
+								  "-express_op": "="
+								},
+								{
+								  "-colume-name": "fundName",
+								  "-colume_value": "工银瑞信货币市场基金",
+								  "-express_op": "="
+								},
+								{
+								  "-colume-name": "categoryId",
+								  "-colume_value": "null",
+								  "-express_op": "="
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	}
+}
+
